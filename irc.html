@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IRC, Matthew Hayto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #F5F0E8; --ink: #1A1714; --ink-light: #4A4540; --ink-muted: #8A847E;
+      --accent: #C4472A; --accent-warm: #E8956A; --rule: #D8D0C4;
+      --serif: 'DM Serif Display', Georgia, serif; --sans: 'DM Sans', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--cream); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 100; opacity: 0.5; }
+    .page { max-width: 720px; margin: 0 auto; padding: 0 2rem; }
+    .site-nav { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 0; border-bottom: 1px solid var(--rule); }
+    .site-nav .home { font-family: var(--serif); font-size: 1rem; color: var(--ink); text-decoration: none; }
+    .site-nav .home:hover { color: var(--accent); }
+    .site-nav .back { font-size: 0.78rem; color: var(--ink-muted); text-decoration: none; display: flex; align-items: center; gap: 0.35rem; transition: color 0.2s; }
+    .site-nav .back:hover { color: var(--accent); }
+    .cs-hero { padding: 4rem 0 3rem; border-bottom: 1px solid var(--rule); opacity: 0; animation: fadeUp 0.7s ease forwards; }
+    .cs-kicker { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); font-weight: 500; margin-bottom: 1rem; }
+    .cs-title { font-family: var(--serif); font-size: clamp(2rem, 5vw, 3rem); line-height: 1.1; color: var(--ink); margin-bottom: 1.25rem; }
+    .cs-lede { font-size: 1.05rem; color: var(--ink-light); font-weight: 300; line-height: 1.7; max-width: 56ch; }
+    .stats-bar { display: flex; border: 1px solid var(--rule); background: white; border-radius: 3px; margin: 2.5rem 0; overflow: hidden; opacity: 0; animation: fadeUp 0.7s ease 0.1s forwards; }
+    .stat-block { flex: 1; padding: 1.25rem 1.5rem; border-right: 1px solid var(--rule); }
+    .stat-block:last-child { border-right: none; }
+    .stat-num { font-family: var(--serif); font-size: 1.75rem; color: var(--accent); line-height: 1; margin-bottom: 0.25rem; }
+    .stat-label { font-size: 0.75rem; color: var(--ink-muted); font-weight: 300; line-height: 1.4; }
+    .cs-body { padding: 3rem 0; opacity: 0; animation: fadeUp 0.7s ease 0.2s forwards; }
+    .cs-section { margin-bottom: 3rem; }
+    .cs-section-label { font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); font-weight: 500; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem; }
+    .cs-section-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+    .cs-h2 { font-family: var(--serif); font-size: 1.5rem; color: var(--ink); margin-bottom: 0.75rem; line-height: 1.2; }
+    .cs-p { font-size: 0.95rem; color: var(--ink-light); font-weight: 300; line-height: 1.8; margin-bottom: 1rem; }
+    .cs-p:last-child { margin-bottom: 0; }
+    .cs-p strong { color: var(--ink); font-weight: 500; }
+    .pull-quote { border-left: 3px solid var(--accent); padding: 1rem 1.5rem; margin: 2rem 0; background: white; }
+    .pull-quote p { font-family: var(--serif); font-size: 1.15rem; color: var(--ink); line-height: 1.5; font-style: italic; }
+    .outcome { background: var(--ink); color: var(--cream); padding: 2.5rem; border-radius: 3px; margin: 2.5rem 0; }
+    .outcome .label { font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent-warm); font-weight: 500; margin-bottom: 1rem; }
+    .outcome p { font-size: 1rem; font-weight: 300; line-height: 1.8; color: #D8D0C4; }
+    .outcome p strong { color: white; font-weight: 500; }
+    .cs-footer { border-top: 1px solid var(--rule); padding: 2rem 0; display: flex; justify-content: space-between; align-items: center; }
+    .cs-footer p { font-size: 0.78rem; color: var(--ink-muted); }
+    .cs-footer a { font-size: 0.78rem; color: var(--ink-muted); text-decoration: none; transition: color 0.2s; }
+    .cs-footer a:hover { color: var(--accent); }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 600px) {
+      .stats-bar { flex-direction: column; }
+      .stat-block { border-right: none; border-bottom: 1px solid var(--rule); }
+      .stat-block:last-child { border-bottom: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <nav class="site-nav">
+    <a href="index.html" class="home">Matthew Hayto</a>
+    <a href="index.html#work" class="back">← All work</a>
+  </nav>
+
+  <div class="cs-hero">
+    <div class="cs-kicker">International Rescue Committee · 2016 – 2024</div>
+    <h1 class="cs-title">A roadmap for refugee crises</h1>
+    <p class="cs-lede">When a refugee crisis hits, field staff have seconds to make decisions that affect thousands of lives. I designed and shipped a validated emergency response tool for the IRC in seven weeks, giving workers the guidance they needed, exactly when they needed it.</p>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-block">
+      <div class="stat-num">7wk</div>
+      <div class="stat-label">from brief to validated, shipped product</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">↓</div>
+      <div class="stat-label">measurably fewer steps to access critical guidance</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">1M+</div>
+      <div class="stat-label">goal: people reached with better humanitarian aid via Dioptra</div>
+    </div>
+  </div>
+
+  <div class="cs-body">
+
+    <div class="cs-section">
+      <div class="cs-section-label">The problem</div>
+      <h2 class="cs-h2">Crisis response requires instant clarity. The IRC's tools didn't provide it.</h2>
+      <p class="cs-p">The International Rescue Committee responds to refugee crises all over the world, floods, conflicts, disease outbreaks. Their field staff are extraordinarily capable, but they operate in chaotic conditions where the difference between a good response and a catastrophic one often comes down to whether the right people have the right information at the right moment.</p>
+      <p class="cs-p">The IRC had deep institutional knowledge, years of best practices, procedures, and hard-won experience encoded in documents, guides, and the heads of senior staff. The problem was access. When a new crisis hit, field workers couldn't quickly find the specific guidance they needed for their specific context. Too much was buried, too much required knowing the right person to ask.</p>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">The approach</div>
+      <h2 class="cs-h2">Define, interview, prototype, iterate, fast</h2>
+      <p class="cs-p">The first thing I did was establish a clear definition of the end user. IRC field staff are not a monolith, their needs differ depending on their role, their region, the phase of the response, and what kind of crisis they're facing. Getting that definition right was the foundation everything else rested on.</p>
+      <p class="cs-p">From there, I spent time interviewing a variety of field staff, the people who would actually use this tool in high-stakes environments. I wanted to understand not just what they needed, but how they worked under pressure. What did they reach for first? What slowed them down? What did they give up on finding and improvise instead?</p>
+      <p class="cs-p">I created easy surveys for users to complete throughout the process, building a continuous feedback loop that ran in parallel with the design work. This wasn't a research phase followed by a build phase, it was both, simultaneously.</p>
+    </div>
+
+    <div class="pull-quote">
+      <p>"The goal wasn't to teach people what to do. It was to surface what they already knew they should do, faster, and in exactly the right format for the moment."</p>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">What we built</div>
+      <h2 class="cs-h2">An interactive emergency roadmap</h2>
+      <p class="cs-p">The output was an interactive visual checklist, a structured roadmap of critical steps present in most emergency responses, designed to be navigated based on where a worker was in the response cycle. Not a document. Not a search box. A tool that understood context and surfaced the right guidance for where you were right now.</p>
+      <p class="cs-p">I built a working prototype quickly, not to impress, but to test. The prototype included a feedback mechanism so users could respond in real time. I then ran live user tests, watching how workers navigated the tool based on their specific needs: some were looking for a template, some for phase-specific guidance, some for a checklist to share with their team. Each session revealed something. Each session made the product better.</p>
+      <p class="cs-p"><strong>The design wasn't the hard part.</strong> The hard part was distilling years of IRC institutional knowledge into a structure that was simple enough to navigate in the middle of a crisis, complete enough to actually be useful, and flexible enough to work across different response types and geographies.</p>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">The broader work</div>
+      <h2 class="cs-h2">Dioptra and the long game</h2>
+      <p class="cs-p">The emergency roadmap was one piece of a longer engagement with the IRC. As a Product Strategy Advisor over eight years, I also led the development of Dioptra, a tool used by NGOs worldwide to measure the impact and cost efficiency of humanitarian programs.</p>
+      <p class="cs-p">The goal was ambitious: reach a million more people with critical humanitarian aid by helping organizations understand what was working and what wasn't. Dioptra gave NGO leaders the data they needed to make better decisions, and to make the case for the programs that deserved more funding and scale.</p>
+    </div>
+
+    <div class="outcome">
+      <div class="label">The outcome</div>
+      <p>In seven weeks, I delivered <strong>a validated, complete design and flow model</strong> for an emergency response roadmap that measurably reduced the number of steps for field staff to access the guidance they needed. The work wasn't just a product, it was a model for how to move fast in a complex, high-stakes environment without cutting corners on the things that matter. <strong>When the stakes are lives, you don't get to be sloppy. You have to be both fast and right.</strong></p>
+    </div>
+
+  </div>
+
+  <footer class="cs-footer">
+    <p>© 2026 Matthew Hayto</p>
+    <a href="meta.html">Next: Meta →</a>
+  </footer>
+
+</div>
+</body>
+</html>

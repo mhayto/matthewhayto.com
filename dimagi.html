@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dimagi, Matthew Hayto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #F5F0E8; --ink: #1A1714; --ink-light: #4A4540; --ink-muted: #8A847E;
+      --accent: #C4472A; --accent-warm: #E8956A; --rule: #D8D0C4;
+      --serif: 'DM Serif Display', Georgia, serif; --sans: 'DM Sans', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--cream); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 100; opacity: 0.5; }
+    .page { max-width: 720px; margin: 0 auto; padding: 0 2rem; }
+    .site-nav { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 0; border-bottom: 1px solid var(--rule); }
+    .site-nav .home { font-family: var(--serif); font-size: 1rem; color: var(--ink); text-decoration: none; }
+    .site-nav .home:hover { color: var(--accent); }
+    .site-nav .back { font-size: 0.78rem; color: var(--ink-muted); text-decoration: none; display: flex; align-items: center; gap: 0.35rem; transition: color 0.2s; }
+    .site-nav .back:hover { color: var(--accent); }
+    .cs-hero { padding: 4rem 0 3rem; border-bottom: 1px solid var(--rule); opacity: 0; animation: fadeUp 0.7s ease forwards; }
+    .cs-kicker { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); font-weight: 500; margin-bottom: 1rem; }
+    .cs-title { font-family: var(--serif); font-size: clamp(2rem, 5vw, 3rem); line-height: 1.1; color: var(--ink); margin-bottom: 1.25rem; }
+    .cs-lede { font-size: 1.05rem; color: var(--ink-light); font-weight: 300; line-height: 1.7; max-width: 56ch; }
+    .stats-bar { display: flex; gap: 0; border: 1px solid var(--rule); background: white; border-radius: 3px; margin: 2.5rem 0; overflow: hidden; opacity: 0; animation: fadeUp 0.7s ease 0.1s forwards; }
+    .stat-block { flex: 1; padding: 1.25rem 1.5rem; border-right: 1px solid var(--rule); }
+    .stat-block:last-child { border-right: none; }
+    .stat-num { font-family: var(--serif); font-size: 1.75rem; color: var(--accent); line-height: 1; margin-bottom: 0.25rem; }
+    .stat-label { font-size: 0.75rem; color: var(--ink-muted); font-weight: 300; line-height: 1.4; }
+    .cs-body { padding: 3rem 0; opacity: 0; animation: fadeUp 0.7s ease 0.2s forwards; }
+    .cs-section { margin-bottom: 3rem; }
+    .cs-section-label { font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); font-weight: 500; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem; }
+    .cs-section-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+    .cs-h2 { font-family: var(--serif); font-size: 1.5rem; color: var(--ink); margin-bottom: 0.75rem; line-height: 1.2; }
+    .cs-p { font-size: 0.95rem; color: var(--ink-light); font-weight: 300; line-height: 1.8; margin-bottom: 1rem; }
+    .cs-p:last-child { margin-bottom: 0; }
+    .cs-p strong { color: var(--ink); font-weight: 500; }
+    .pull-quote { border-left: 3px solid var(--accent); padding: 1rem 1.5rem; margin: 2rem 0; background: white; }
+    .pull-quote p { font-family: var(--serif); font-size: 1.15rem; color: var(--ink); line-height: 1.5; font-style: italic; }
+    .outcome { background: var(--ink); color: var(--cream); padding: 2.5rem; border-radius: 3px; margin: 2.5rem 0; }
+    .outcome .label { font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent-warm); font-weight: 500; margin-bottom: 1rem; }
+    .outcome p { font-size: 1rem; font-weight: 300; line-height: 1.8; color: #D8D0C4; }
+    .outcome p strong { color: white; font-weight: 500; }
+    .cs-footer { border-top: 1px solid var(--rule); padding: 2rem 0; display: flex; justify-content: space-between; align-items: center; }
+    .cs-footer p { font-size: 0.78rem; color: var(--ink-muted); }
+    .cs-footer a { font-size: 0.78rem; color: var(--ink-muted); text-decoration: none; transition: color 0.2s; }
+    .cs-footer a:hover { color: var(--accent); }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 600px) {
+      .stats-bar { flex-direction: column; }
+      .stat-block { border-right: none; border-bottom: 1px solid var(--rule); }
+      .stat-block:last-child { border-bottom: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <nav class="site-nav">
+    <a href="index.html" class="home">Matthew Hayto</a>
+    <a href="index.html#work" class="back">← All work</a>
+  </nav>
+
+  <div class="cs-hero">
+    <div class="cs-kicker">Dimagi · 2024 – Present</div>
+    <h1 class="cs-title">From scrappy tool to world-class product</h1>
+    <p class="cs-lede">SureAdhere was an underbuilt app tackling one of the world's deadliest diseases. I joined as the first formal product leader at Dimagi to turn it into something that could actually scale, and in under two years, we tripled revenue and cut missed doses in half.</p>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-block">
+      <div class="stat-num">3×</div>
+      <div class="stat-label">revenue growth to $3M ARR</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">50%</div>
+      <div class="stat-label">reduction in missed TB treatment doses</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">#1</div>
+      <div class="stat-label">deadliest infectious disease in the world, what SureAdhere treats</div>
+    </div>
+  </div>
+
+  <div class="cs-body">
+
+    <div class="cs-section">
+      <div class="cs-section-label">The context</div>
+      <h2 class="cs-h2">Tuberculosis kills 1.25 million people a year. Adherence is the problem.</h2>
+      <p class="cs-p">TB is curable. But treatment requires patients to take a precise combination of drugs for six months or more, and missing doses can lead to drug-resistant strains that are far harder, and far more expensive, to treat. The global health system has known this for decades. The hard part is the follow-through.</p>
+      <p class="cs-p">SureAdhere exists to solve that problem. Backed by the CDC and WHO, it's a digital treatment support tool that helps patients stay on track and gives healthcare workers visibility into who's at risk. The mission was clear. But when I arrived at Dimagi in 2024, the product wasn't living up to it.</p>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">What I found</div>
+      <h2 class="cs-h2">A capable tool that had never been treated as a real product</h2>
+      <p class="cs-p">SureAdhere had real users and genuine impact, but it had been built and maintained as a project, not a product. There was no dedicated product function, no consistent discovery process, and no clear strategy for how the tool should evolve. Features had accumulated without a through-line. The growth story was underdeveloped. And the team, though talented, had never had someone whose job was to think about the full picture.</p>
+      <p class="cs-p">As the first formal product leader at Dimagi, my mandate was broad: build the function from scratch, create a strategy worth executing, and demonstrate traction quickly enough to earn continued investment.</p>
+    </div>
+
+    <div class="pull-quote">
+      <p>"The product wasn't broken. It just hadn't been given the chance to be great."</p>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">What we did</div>
+      <h2 class="cs-h2">Building the foundation while shipping the product</h2>
+      <p class="cs-p">The first months were about establishing the basics that any strong product organization needs: a discovery process, a prioritization framework, a clear product strategy, and habits of communication that kept the whole company oriented. I worked closely with executive leadership to reshape how Dimagi thought about product, not just as the thing we shipped, but as the discipline that drives every decision.</p>
+      <p class="cs-p">At the same time, we were shipping. I hired a team of top product talent and we moved quickly on the features and improvements that mattered most, the ones with the highest potential to improve patient outcomes and unlock commercial growth. We worked closely with health programs across multiple countries, treating them as true partners in design rather than passive customers.</p>
+      <p class="cs-p">One of the most important shifts was reframing how we thought about success. Dose adherence isn't just a health outcome, it's a signal that the product is working. When patients stay on track, programs get better, word spreads, and new contracts follow. <strong>We tied our product metrics directly to the health outcomes we cared about.</strong> That alignment changed how the team made decisions.</p>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">The role of AI</div>
+      <h2 class="cs-h2">Deploying AI where it actually helps</h2>
+      <p class="cs-p">One of the threads running through this work has been the practical application of AI to a domain where it can make a real difference. I led the deployment of Claude Code at Dimagi, not as a technology experiment, but as a genuine accelerant for our small team. When you're building a world-class product with limited resources, every leverage point matters.</p>
+      <p class="cs-p">AI has also shaped how we think about the product itself, how we can surface risk signals for healthcare workers, how we can personalize patient outreach, and how we can do more with the data that flows through the system every day.</p>
+    </div>
+
+    <div class="outcome">
+      <div class="label">The outcome</div>
+      <p>In under two years, SureAdhere's revenue <strong>tripled to $3M ARR</strong> and missed doses fell by <strong>50%</strong> across enrolled patients. Those aren't just business metrics, each missed dose prevented is a patient who stayed on track, a drug-resistant case that didn't happen, a family that didn't lose someone. <strong>The goal now is to take this product to global scale, reaching patients in every corner of the world where TB remains a crisis.</strong></p>
+    </div>
+
+  </div>
+
+  <footer class="cs-footer">
+    <p>© 2026 Matthew Hayto</p>
+    <a href="taproot.html">Next: Taproot →</a>
+  </footer>
+
+</div>
+</body>
+</html>

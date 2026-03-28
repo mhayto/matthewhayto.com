@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Matthew Hayto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #F5F0E8;
+      --ink: #1A1714;
+      --ink-light: #4A4540;
+      --ink-muted: #8A847E;
+      --accent: #C4472A;
+      --accent-warm: #E8956A;
+      --rule: #D8D0C4;
+      --serif: 'DM Serif Display', Georgia, serif;
+      --sans: 'DM Sans', system-ui, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── NOISE TEXTURE OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0.5;
+    }
+
+    /* ─── LAYOUT ─── */
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      padding: 4rem 0 3rem;
+      border-bottom: 1px solid var(--rule);
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards;
+    }
+
+    .header-inner {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 2rem;
+    }
+
+    .name {
+      font-family: var(--serif);
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+
+    .name em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .tagline {
+      font-size: 1.05rem;
+      color: var(--ink-light);
+      font-weight: 300;
+      max-width: 38ch;
+      margin-top: 1rem;
+      line-height: 1.5;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.4rem;
+    }
+
+    .contact-links a {
+      color: var(--ink-light);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .contact-links a:hover { color: var(--accent); }
+
+    .contact-links a svg {
+      width: 14px;
+      height: 14px;
+      opacity: 0.6;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      padding: 1.25rem 0;
+      border-bottom: 1px solid var(--rule);
+      display: flex;
+      gap: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.1s forwards;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--ink-muted);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--accent); }
+
+    /* ─── MAIN GRID ─── */
+    main {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 0;
+      padding: 4rem 0;
+    }
+
+    /* ─── SECTIONS ─── */
+    section {
+      padding: 0 0 3rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards;
+    }
+
+    section:nth-child(1) { animation-delay: 0.2s; }
+    section:nth-child(2) { animation-delay: 0.3s; }
+    section:nth-child(3) { animation-delay: 0.4s; }
+
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--rule);
+      max-width: 3rem;
+    }
+
+    /* ─── EXPERIENCE ─── */
+    .experience-list { list-style: none; }
+
+    /* Company group: single dot on the timeline, company name as header */
+    .experience-group {
+      padding: 0 3rem 2.5rem 1.5rem;
+      border-left: 2px solid var(--rule);
+      margin-left: 0.5rem;
+      position: relative;
+      transition: border-color 0.3s;
+    }
+
+    .experience-group::before {
+      content: '';
+      position: absolute;
+      left: -5px;
+      top: 7px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--ink);
+      transition: background 0.3s;
+    }
+
+    .experience-group:hover { border-color: var(--accent-warm); }
+    .experience-group:hover::before { background: var(--accent); }
+
+    .exp-company {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      line-height: 1.2;
+      color: var(--ink);
+      margin-bottom: 0.15rem;
+    }
+
+    .exp-company-meta {
+      font-size: 0.78rem;
+      color: var(--ink-muted);
+      font-weight: 300;
+      margin-bottom: 1rem;
+    }
+
+    /* Sub-roles within a company group */
+    .sub-roles { list-style: none; }
+
+    .sub-role {
+      position: relative;
+      padding-left: 1.1rem;
+      padding-bottom: 1.4rem;
+      border-left: 1px dashed var(--rule);
+      margin-left: 0.3rem;
+    }
+
+    .sub-role:last-child {
+      padding-bottom: 0;
+      border-left-color: transparent;
+    }
+
+    .sub-role::before {
+      content: '';
+      position: absolute;
+      left: -4px;
+      top: 6px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--cream);
+      border: 1.5px solid var(--accent);
+    }
+
+    /* Promotion badge between sub-roles */
+    .promotion-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: white;
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      padding: 0.15rem 0.45rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .promotion-badge svg {
+      width: 9px;
+      height: 9px;
+    }
+
+    /* Single-company items (no promotion) */
+    .experience-item {
+      padding: 0 3rem 2.5rem 1.5rem;
+      border-left: 2px solid var(--rule);
+      margin-left: 0.5rem;
+      position: relative;
+      transition: border-color 0.3s;
+    }
+
+    .experience-item::before {
+      content: '';
+      position: absolute;
+      left: -5px;
+      top: 7px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--rule);
+      transition: background 0.3s;
+    }
+
+    .experience-item:hover { border-color: var(--accent-warm); }
+    .experience-item:hover::before { background: var(--accent); }
+
+    .exp-role {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 0.15rem;
+    }
+
+    .exp-meta {
+      font-size: 0.78rem;
+      color: var(--ink-muted);
+      margin-bottom: 0.65rem;
+      font-weight: 300;
+    }
+
+    .exp-meta strong {
+      color: var(--ink-light);
+      font-weight: 500;
+    }
+
+    .exp-desc {
+      font-size: 0.88rem;
+      color: var(--ink-light);
+      line-height: 1.65;
+      font-weight: 300;
+    }
+
+    .exp-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.85rem;
+    }
+
+    .stat {
+      background: white;
+      border: 1px solid var(--rule);
+      padding: 0.2rem 0.6rem;
+      border-radius: 2px;
+      font-size: 0.75rem;
+      color: var(--ink-light);
+      font-weight: 500;
+    }
+
+    .stat strong {
+      color: var(--accent);
+    }
+
+    /* ─── SIDEBAR ─── */
+    aside {
+      border-left: 1px solid var(--rule);
+      padding-left: 2.5rem;
+      padding-top: 0;
+    }
+
+    .sidebar-block {
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards;
+    }
+
+    .sidebar-block:nth-child(1) { animation-delay: 0.35s; }
+    .sidebar-block:nth-child(2) { animation-delay: 0.45s; }
+    .sidebar-block:nth-child(3) { animation-delay: 0.55s; }
+    .sidebar-block:nth-child(4) { animation-delay: 0.65s; }
+
+    .sidebar-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .leadership-item {
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .leadership-item:last-child { border-bottom: none; }
+
+    .leadership-title {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 0.25rem;
+    }
+
+    .leadership-desc {
+      font-size: 0.78rem;
+      color: var(--ink-muted);
+      line-height: 1.5;
+      font-weight: 300;
+    }
+
+    .skills-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .skills-list li {
+      font-size: 0.82rem;
+      color: var(--ink-light);
+      padding-left: 0.9rem;
+      position: relative;
+      font-weight: 300;
+    }
+
+    .skills-list li::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 0.7rem;
+    }
+
+    .edu-school {
+      font-family: var(--serif);
+      font-size: 1rem;
+      color: var(--ink);
+      margin-bottom: 0.2rem;
+    }
+
+    .edu-degree {
+      font-size: 0.8rem;
+      color: var(--ink-light);
+      font-weight: 300;
+      line-height: 1.5;
+    }
+
+    .edu-year {
+      font-size: 0.75rem;
+      color: var(--ink-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid var(--rule);
+      padding: 2rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer p {
+      font-size: 0.78rem;
+      color: var(--ink-muted);
+      font-weight: 300;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-links a {
+      font-size: 0.78rem;
+      color: var(--ink-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--accent); }
+
+    /* ─── WORK CARDS ─── */
+    .work-card {
+      display: block;
+      text-decoration: none;
+      background: white;
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      padding: 1.75rem;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+
+    .work-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.07);
+    }
+
+    .work-card-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 0.6rem;
+    }
+
+    .work-card-title {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      line-height: 1.25;
+      color: var(--ink);
+      margin-bottom: 0.75rem;
+    }
+
+    .work-card-desc {
+      font-size: 0.83rem;
+      color: var(--ink-muted);
+      line-height: 1.6;
+      font-weight: 300;
+      margin-bottom: 1.25rem;
+    }
+
+    .work-card-cta {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.02em;
+    }
+
+    .work-card-cta span {
+      display: inline-block;
+      transition: transform 0.2s;
+    }
+
+    .work-card:hover .work-card-cta span { transform: translateX(4px); }
+
+    @media (max-width: 700px) {
+      #work > div { grid-template-columns: 1fr; }
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 700px) {
+      .header-inner {
+        grid-template-columns: 1fr;
+      }
+      .contact-links {
+        flex-direction: row;
+        align-items: flex-start;
+      }
+      main {
+        grid-template-columns: 1fr;
+      }
+      aside {
+        border-left: none;
+        border-top: 1px solid var(--rule);
+        padding-left: 0;
+        padding-top: 2.5rem;
+      }
+      .experience-item, .experience-group {
+        padding-right: 0;
+      }
+      footer {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ─── HEADER ─── -->
+  <header>
+    <div class="header-inner">
+      <div>
+        <h1 class="name">Matthew <em>Hayto</em></h1>
+        <p class="tagline">I'm a product person who likes to build things that help people.</p>
+      </div>
+      <div class="contact-links">
+        <a href="mailto:matthewhayto@gmail.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          matthewhayto@gmail.com
+        </a>
+        <a href="https://linkedin.com/in/matthewhayto" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+          linkedin.com/in/matthewhayto
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─── NAV ─── -->
+  <nav>
+    <a href="#work">Work</a>
+    <a href="#experience">Experience</a>
+    <a href="#leadership">Leadership</a>
+    <a href="#skills">Skills</a>
+    <a href="#education">Education</a>
+  </nav>
+
+  <!-- ─── SELECTED WORK ─── -->
+  <section id="work" style="padding: 3.5rem 0; border-bottom: 1px solid var(--rule); opacity:0; animation: fadeUp 0.8s ease 0.15s forwards;">
+    <p class="section-label">Selected Work</p>
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
+
+      <a href="dimagi.html" class="work-card">
+        <div class="work-card-label">Dimagi · 2024–Present</div>
+        <div class="work-card-title">From scrappy tool to world-class product</div>
+        <p class="work-card-desc">How I took SureAdhere, an underbuilt TB treatment app, and transformed it into a globally scalable platform, tripling revenue and cutting missed doses in half.</p>
+        <div class="work-card-cta">Read the story <span>→</span></div>
+      </a>
+
+      <a href="meta.html" class="work-card">
+        <div class="work-card-label">Meta · 2017–2023</div>
+        <div class="work-card-title">Protecting two billion people from harm</div>
+        <p class="work-card-desc">How I led teams building the world's largest content moderation system, combining AI and human review to protect users on Facebook, Instagram, and WhatsApp.</p>
+        <div class="work-card-cta">Read the story <span>→</span></div>
+      </a>
+
+      <a href="taproot.html" class="work-card">
+        <div class="work-card-label">Taproot Foundation · 2014–2016</div>
+        <div class="work-card-title">Building a pro bono marketplace from zero</div>
+        <p class="work-card-desc">How I launched Taproot+ from scratch, using lean product principles to reach 30,000 users and unlock $10M in pro bono services for nonprofits.</p>
+        <div class="work-card-cta">Read the story <span>→</span></div>
+      </a>
+
+      <a href="irc.html" class="work-card">
+        <div class="work-card-label">IRC · 2016–2024</div>
+        <div class="work-card-title">A roadmap for refugee crises</div>
+        <p class="work-card-desc">How I designed an interactive emergency response tool that gave IRC field staff instant access to critical guidance, validated and shipped in seven weeks.</p>
+        <div class="work-card-cta">Read the story <span>→</span></div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ─── MAIN ─── -->
+  <main>
+
+    <!-- ─── LEFT: EXPERIENCE ─── -->
+    <div>
+      <section id="experience">
+        <p class="section-label">Experience</p>
+        <ul class="experience-list">
+
+          <!-- ── DIMAGI (grouped: 2 roles) ── -->
+          <li class="experience-group">
+            <div class="exp-company">Dimagi</div>
+            <div class="exp-company-meta">Remote · May 2024 – Present · 1 yr 11 mos</div>
+            <ul class="sub-roles">
+              <li class="sub-role">
+                <div class="exp-role">Head of Product, SureAdhere</div>
+                <div class="exp-meta">Sep 2025 – Present · Full-time</div>
+                <p class="exp-desc">Leading SureAdhere, a Tuberculosis treatment tool used around the world to expand access to care. Working to dramatically improve dose adherence with the goal of taking the product to global scale at a fraction of the cost of traditional TB treatment.</p>
+              </li>
+              <li class="sub-role">
+                <span class="promotion-badge">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+                  Promoted
+                </span>
+                <div class="exp-role">Director of Product</div>
+                <div class="exp-meta">May 2024 – Sep 2025 · 1 yr 5 mos</div>
+                <p class="exp-desc">As the first formal product leader at Dimagi, led a company-wide transition to becoming a product-first organization, establishing frameworks, coaching executive leadership, and hiring a team of top talent.</p>
+                <div class="exp-stats">
+                  <span class="stat"><strong>3×</strong> revenue growth to $3M</span>
+                  <span class="stat"><strong>50%</strong> fewer missed doses</span>
+                </div>
+              </li>
+            </ul>
+          </li>
+
+          <!-- ── META (grouped: 2 roles) ── -->
+          <li class="experience-group">
+            <div class="exp-company">Meta</div>
+            <div class="exp-company-meta">San Francisco Bay Area · Nov 2017 – Jul 2023 · 5 yrs 9 mos</div>
+            <ul class="sub-roles">
+              <li class="sub-role">
+                <div class="exp-role">Product Lead</div>
+                <div class="exp-meta">Jul 2021 – Jul 2023 · 2 yrs 1 mo · On-site</div>
+                <p class="exp-desc">Led four product teams building tools to detect and remove harmful speech, graphic violence, and misinformation on Facebook, Instagram, and WhatsApp, plus safety systems to protect content moderators themselves.</p>
+                <div class="exp-stats">
+                  <span class="stat"><strong>70%</strong> faster harm response</span>
+                  <span class="stat"><strong>50%</strong> faster onboarding</span>
+                  <span class="stat"><strong>30%</strong> less graphic content for reviewers</span>
+                </div>
+              </li>
+              <li class="sub-role">
+                <span class="promotion-badge">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+                  Promoted
+                </span>
+                <div class="exp-role">Product Manager</div>
+                <div class="exp-meta">Nov 2017 – Jun 2021 · 3 yrs 8 mos</div>
+                <p class="exp-desc">Led a cross-functional platform team to improve reliability of the largest content moderation system in the world, reducing error rates by 20% and building better developer tooling, paving the way for classifier-led review.</p>
+                <div class="exp-stats">
+                  <span class="stat"><strong>20%</strong> fewer error rates</span>
+                </div>
+              </li>
+            </ul>
+          </li>
+
+          <!-- ── IRC ── -->
+          <li class="experience-item">
+            <div class="exp-role">Product Strategy Advisor</div>
+            <div class="exp-meta"><strong>International Rescue Committee</strong> · Remote · Oct 2016 – May 2024 · 7 yrs 8 mos</div>
+            <p class="exp-desc">Worked with the IRC on digital tools to improve their ability to respond to humanitarian crises. Built Dioptra, used by NGOs worldwide to measure the impact and cost efficiency of humanitarian work, with the goal of reaching a million more people with critical humanitarian aid.</p>
+          </li>
+
+          <!-- ── TAPROOT ── -->
+          <li class="experience-item">
+            <div class="exp-role">Product Lead, Taproot+</div>
+            <div class="exp-meta"><strong>Taproot Foundation</strong> · New York, NY · Jun 2014 – Oct 2016 · 2 yrs 5 mos</div>
+            <p class="exp-desc">Launched and scaled a marketplace for pro bono projects from the ground up. In 2.5 years, grew to 30,000 users and resulted in $10 million in pro bono service delivered.</p>
+            <div class="exp-stats">
+              <span class="stat"><strong>30,000+</strong> users</span>
+              <span class="stat"><strong>$10M</strong> pro bono delivered</span>
+            </div>
+          </li>
+
+          <!-- ── MONGODB ── -->
+          <li class="experience-item">
+            <div class="exp-role">Global Education Coordinator</div>
+            <div class="exp-meta"><strong>MongoDB</strong> · New York, NY · Jul 2013 – Jul 2014 · 1 yr 1 mo</div>
+            <p class="exp-desc">Managed learning tools, curricula, and training programs for MongoDB software for public and private customers around the world.</p>
+          </li>
+
+          <!-- ── DREAMBOX ── -->
+          <li class="experience-item">
+            <div class="exp-role">Co-Founder &amp; Head of Product</div>
+            <div class="exp-meta"><strong>Dreambox Emergence</strong> · New York, NY · Jun 2012 – Jun 2014 · 2 yrs 1 mo</div>
+            <p class="exp-desc">Co-founded and led product strategy at a B-corp created to empower remote communities in Guatemala to re-think local manufacturing with custom-built 3D printers.</p>
+          </li>
+
+          <!-- ── GARDINER ── -->
+          <li class="experience-item">
+            <div class="exp-role">Project Manager</div>
+            <div class="exp-meta"><strong>Gardiner &amp; Theobald LLP</strong> · New York, NY · Jul 2011 – Jul 2013 · 2 yrs 1 mo</div>
+            <p class="exp-desc">Coordinated four major NYC construction projects from start to finish, ranging from $10 to $100 million each, managing government, contractor, and owner stakeholders.</p>
+          </li>
+
+          <!-- ── JP MORGAN ── -->
+          <li class="experience-item">
+            <div class="exp-role">Investment Banking Analyst</div>
+            <div class="exp-meta"><strong>J.P. Morgan</strong> · New York, NY · Jun 2010 – Aug 2010 · 3 mos</div>
+            <p class="exp-desc">Summer analyst in investment banking.</p>
+          </li>
+
+        </ul>
+      </section>
+    </div>
+
+    <!-- ─── RIGHT: SIDEBAR ─── -->
+    <aside>
+
+      <div class="sidebar-block" id="leadership">
+        <p class="sidebar-label">Leadership</p>
+
+        <div class="leadership-item">
+          <div class="leadership-title">Organizational Leader</div>
+          <div class="leadership-desc">Exceeded management expectations for PMs at Meta, saw each report through L4 promotions, and conducted over 200 product manager interviews.</div>
+        </div>
+
+        <div class="leadership-item">
+          <div class="leadership-title">AI Systems Leader</div>
+          <div class="leadership-desc">Career spent training AI models at Meta and leading Claude Code deployment at Dimagi.</div>
+        </div>
+
+        <div class="leadership-item">
+          <div class="leadership-title">Product Coach</div>
+          <div class="leadership-desc">Formally mentored 5 product managers into senior roles across various companies.</div>
+        </div>
+
+        <div class="leadership-item">
+          <div class="leadership-title">Public Speaker</div>
+          <div class="leadership-desc">Spoken at high-profile engagements on building technology in the nonprofit sector and implementing lean product strategy.</div>
+        </div>
+
+        <div class="leadership-item">
+          <div class="leadership-title">Founder, Dreambox Emergence</div>
+          <div class="leadership-desc">Co-founded a company in 2012 to deploy automated 3D printers to hard-to-reach areas in Guatemala.</div>
+        </div>
+
+        <div class="leadership-item">
+          <div class="leadership-title">Alpine County Search & Rescue</div>
+          <div class="leadership-desc">Member specializing in backcountry mountain rescues in the mountain recreation capital of California.</div>
+        </div>
+      </div>
+
+      <div class="sidebar-block" id="skills">
+        <p class="sidebar-label">Specializations</p>
+        <ul class="skills-list">
+          <li>Building successful product teams</li>
+          <li>Product-led organizational change</li>
+          <li>Product and growth strategy</li>
+          <li>AI-driven product development</li>
+          <li>Cross-functional collaboration</li>
+          <li>Agile & Lean product management</li>
+        </ul>
+      </div>
+
+      <div class="sidebar-block" id="education">
+        <p class="sidebar-label">Education</p>
+        <div class="edu-school">Columbia University</div>
+        <div class="edu-degree">B.S. Industrial Engineering &amp; Operations Research<br>Minors in Economics &amp; Sustainable Engineering</div>
+        <div class="edu-year">Class of 2011</div>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <!-- ─── FOOTER ─── -->
+  <footer>
+    <p>© 2026 Matthew Hayto</p>
+    <div class="footer-links">
+      <a href="/cdn-cgi/l/email-protection#610c0015150904160

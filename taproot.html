@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Taproot+, Matthew Hayto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #F5F0E8; --ink: #1A1714; --ink-light: #4A4540; --ink-muted: #8A847E;
+      --accent: #C4472A; --accent-warm: #E8956A; --rule: #D8D0C4;
+      --serif: 'DM Serif Display', Georgia, serif; --sans: 'DM Sans', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--cream); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 100; opacity: 0.5; }
+    .page { max-width: 720px; margin: 0 auto; padding: 0 2rem; }
+    .site-nav { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 0; border-bottom: 1px solid var(--rule); }
+    .site-nav .home { font-family: var(--serif); font-size: 1rem; color: var(--ink); text-decoration: none; }
+    .site-nav .home:hover { color: var(--accent); }
+    .site-nav .back { font-size: 0.78rem; color: var(--ink-muted); text-decoration: none; display: flex; align-items: center; gap: 0.35rem; transition: color 0.2s; }
+    .site-nav .back:hover { color: var(--accent); }
+    .cs-hero { padding: 4rem 0 3rem; border-bottom: 1px solid var(--rule); opacity: 0; animation: fadeUp 0.7s ease forwards; }
+    .cs-kicker { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); font-weight: 500; margin-bottom: 1rem; }
+    .cs-title { font-family: var(--serif); font-size: clamp(2rem, 5vw, 3rem); line-height: 1.1; color: var(--ink); margin-bottom: 1.25rem; }
+    .cs-lede { font-size: 1.05rem; color: var(--ink-light); font-weight: 300; line-height: 1.7; max-width: 56ch; }
+    .stats-bar { display: flex; border: 1px solid var(--rule); background: white; border-radius: 3px; margin: 2.5rem 0; overflow: hidden; opacity: 0; animation: fadeUp 0.7s ease 0.1s forwards; }
+    .stat-block { flex: 1; padding: 1.25rem 1.5rem; border-right: 1px solid var(--rule); }
+    .stat-block:last-child { border-right: none; }
+    .stat-num { font-family: var(--serif); font-size: 1.75rem; color: var(--accent); line-height: 1; margin-bottom: 0.25rem; }
+    .stat-label { font-size: 0.75rem; color: var(--ink-muted); font-weight: 300; line-height: 1.4; }
+    .cs-body { padding: 3rem 0; opacity: 0; animation: fadeUp 0.7s ease 0.2s forwards; }
+    .cs-section { margin-bottom: 3rem; }
+    .cs-section-label { font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); font-weight: 500; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem; }
+    .cs-section-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+    .cs-h2 { font-family: var(--serif); font-size: 1.5rem; color: var(--ink); margin-bottom: 0.75rem; line-height: 1.2; }
+    .cs-p { font-size: 0.95rem; color: var(--ink-light); font-weight: 300; line-height: 1.8; margin-bottom: 1rem; }
+    .cs-p:last-child { margin-bottom: 0; }
+    .cs-p strong { color: var(--ink); font-weight: 500; }
+    .pull-quote { border-left: 3px solid var(--accent); padding: 1rem 1.5rem; margin: 2rem 0; background: white; }
+    .pull-quote p { font-family: var(--serif); font-size: 1.15rem; color: var(--ink); line-height: 1.5; font-style: italic; }
+    .outcome { background: var(--ink); color: var(--cream); padding: 2.5rem; border-radius: 3px; margin: 2.5rem 0; }
+    .outcome .label { font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent-warm); font-weight: 500; margin-bottom: 1rem; }
+    .outcome p { font-size: 1rem; font-weight: 300; line-height: 1.8; color: #D8D0C4; }
+    .outcome p strong { color: white; font-weight: 500; }
+    .hbr-callout { border: 1px solid var(--rule); background: white; padding: 1.25rem 1.5rem; border-radius: 3px; margin: 2rem 0; display: flex; align-items: center; gap: 1rem; }
+    .hbr-callout .hbr-label { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted); font-weight: 500; margin-bottom: 0.2rem; }
+    .hbr-callout .hbr-title { font-size: 0.9rem; color: var(--ink); font-weight: 400; }
+    .hbr-callout a { font-size: 0.78rem; color: var(--accent); text-decoration: none; white-space: nowrap; font-weight: 500; }
+    .hbr-callout a:hover { text-decoration: underline; }
+    .cs-footer { border-top: 1px solid var(--rule); padding: 2rem 0; display: flex; justify-content: space-between; align-items: center; }
+    .cs-footer p { font-size: 0.78rem; color: var(--ink-muted); }
+    .cs-footer a { font-size: 0.78rem; color: var(--ink-muted); text-decoration: none; transition: color 0.2s; }
+    .cs-footer a:hover { color: var(--accent); }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 600px) {
+      .stats-bar { flex-direction: column; }
+      .stat-block { border-right: none; border-bottom: 1px solid var(--rule); }
+      .stat-block:last-child { border-bottom: none; }
+      .hbr-callout { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <nav class="site-nav">
+    <a href="index.html" class="home">Matthew Hayto</a>
+    <a href="index.html#work" class="back">← All work</a>
+  </nav>
+
+  <div class="cs-hero">
+    <div class="cs-kicker">Taproot Foundation · 2014 – 2016 · 2.5 years</div>
+    <h1 class="cs-title">Building a pro bono marketplace from zero</h1>
+    <p class="cs-lede">Taproot+ didn't exist when I joined. Two and a half years later, it had 30,000 users and had delivered $10 million in pro bono services to nonprofits, using a lean, assumption-driven approach that prioritized outcomes over features from day one.</p>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-block">
+      <div class="stat-num">30K</div>
+      <div class="stat-label">users on the platform at launch</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">$10M</div>
+      <div class="stat-label">in pro bono services delivered</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">2.5</div>
+      <div class="stat-label">years from zero to a scaled marketplace</div>
+    </div>
+  </div>
+
+  <div class="cs-body">
+
+    <div class="cs-section">
+      <div class="cs-section-label">The problem</div>
+      <h2 class="cs-h2">Pro bono work existed. A marketplace for it didn't.</h2>
+      <p class="cs-p">The Taproot Foundation had spent years connecting skilled volunteers with nonprofits who needed their expertise, lawyers, designers, marketers, strategists. It worked, but it was slow, staff-intensive, and hard to scale. Each match required human coordination. The model couldn't grow.</p>
+      <p class="cs-p">The hypothesis was that a self-service marketplace could change that. If volunteers and nonprofits could find each other directly, browse, connect, and start a project without a Taproot staffer in the middle, the same mission could reach far more people. My job was to test that hypothesis and build the thing that proved it.</p>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">The insight</div>
+      <h2 class="cs-h2">Volunteers shop. Nonprofits wait. Build for the volunteer.</h2>
+      <p class="cs-p">Early in the project, I conducted extensive user interviews with both sides of the marketplace. What we found reshaped everything. Nonprofits, accustomed to Taproot's high-touch model, expected to post a need and wait. Volunteers, on the other hand, wanted to browse, to find a project that fit their skills, their interests, and their availability.</p>
+      <p class="cs-p">The implication was clear: <strong>the marketplace had to be built for volunteers first.</strong> They were the ones doing the shopping. If we made it easy for volunteers to find compelling projects, nonprofits would get matched. If we optimized for nonprofits, nothing would move. This single insight determined nearly every product decision that followed.</p>
+    </div>
+
+    <div class="pull-quote">
+      <p>"We weren't building a platform. We were building a habit, getting skilled professionals to see pro bono work as something they actually wanted to do."</p>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">How we built it</div>
+      <h2 class="cs-h2">Manual first, automate what works</h2>
+      <p class="cs-p">We didn't start by building software. We started by simulating the marketplace manually, creating project pages, connecting volunteers to nonprofits by hand, and watching what happened. This was the minimum viable product: static pages, email notifications, and a lot of staff effort behind the scenes to make it look automated.</p>
+      <p class="cs-p">Every time we manually responded to a user need, we asked: is this common enough to automate? We built a simple scheduling tool that reminded users to check in on their projects, and an automatic check-in system that flagged projects needing attention. Each automation replaced staff time with product, but only after we'd confirmed the need was real.</p>
+      <p class="cs-p">Working closely with a developer and a design shop, we kept the team tiny and the feedback loops short. We ran regular interviews throughout the build, and used surveys embedded in the product to gather ongoing signal. <strong>Nothing got built that wasn't measurably adding value.</strong></p>
+    </div>
+
+    <div class="cs-section">
+      <div class="cs-section-label">What it took</div>
+      <h2 class="cs-h2">Outcomes, not outputs</h2>
+      <p class="cs-p">Taproot's existing programs had a solid set of ground rules for what good pro bono work looked like, but they'd been built for a staff-run model. Translating those rules into a self-service product meant constantly asking: what's the outcome we're actually trying to produce? Not "we need a project listing page," but "we need 10 nonprofits matched with a volunteer each week."</p>
+      <p class="cs-p">That outcomes-first mindset kept us from over-building. Every feature had to justify itself against a specific goal. When a feature didn't move the metric, we cut it. When something worked, we doubled down. The result was a lean, functional marketplace that actually converted, not a sprawling product that impressed in demos but failed in use.</p>
+    </div>
+
+    <div class="hbr-callout">
+      <div>
+        <div class="hbr-label">Featured in</div>
+        <div class="hbr-title">Harvard Business Review, Taproot+ case study</div>
+      </div>
+      <a href="https://hbr.org" target="_blank" rel="noopener">Read the case study →</a>
+    </div>
+
+    <div class="outcome">
+      <div class="label">The outcome</div>
+      <p>In 2.5 years, Taproot+ grew to <strong>30,000 users</strong> and delivered <strong>$10 million in pro bono services</strong> to nonprofits that couldn't have afforded them otherwise. The product was lean enough to sustain itself with a small team, and the approach was disciplined enough that it earned a Harvard Business Review case study. The thing I'm proudest of isn't the numbers. It's that we built something that actually worked for the people who used it.</p>
+    </div>
+
+  </div>
+
+  <footer class="cs-footer">
+    <p>© 2026 Matthew Hayto</p>
+    <a href="irc.html">Next: IRC →</a>
+  </footer>
+
+</div>
+</body>
+</html>
