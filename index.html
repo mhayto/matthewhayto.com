@@ -524,6 +524,40 @@
       #work > div { grid-template-columns: 1fr; }
     }
 
+
+    /* ─── COMPANY LOGOS ─── */
+    .co-logo {
+      width: 44px; height: 44px; flex-shrink: 0;
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 8px; border: 1px solid var(--rule);
+      background: white; overflow: hidden;
+    }
+    .co-logo img { width: 44px; height: 44px; object-fit: contain; }
+    .co-mono {
+      width: 44px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 8px;
+      font-family: var(--sans); font-size: 11px; font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .exp-company-header {
+      display: flex; align-items: center; gap: 0.85rem; margin-bottom: 0.15rem;
+    }
+    .exp-item-header {
+      display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;
+    }
+    .exp-item-header .exp-role { margin-bottom: 0; }
+    .work-card-header {
+      display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.85rem;
+    }
+    .work-card-logo {
+      width: 40px; height: 40px; flex-shrink: 0;
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 8px; border: 1px solid var(--rule);
+      background: white; overflow: hidden;
+    }
+    .work-card-logo img { width: 40px; height: 40px; object-fit: contain; }
+    .work-card-logo .co-mono { width: 40px; height: 40px; font-size: 10px; border-radius: 8px; }
     /* ─── ANIMATIONS ─── */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(16px); }
@@ -609,28 +643,28 @@
     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
 
       <a href="dimagi.html" class="work-card">
-        <div class="work-card-label">Dimagi · 2024–Present</div>
+        <div class="work-card-header"><span class="work-card-logo"><img src="https://img.logo.dev/dimagi.com?token=pk_RMBSYA-GTMOxs0F3fcRMxQ&size=80&format=png&fallback=404" width="40" height="40" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><span class="co-mono" style="display:none;background:#1B4F8A;color:#ffffff;">D</span></span><div class="work-card-label" style="margin-bottom:0;">Dimagi · 2024–Present</div></div>
         <div class="work-card-title">From scrappy tool to world-class product</div>
         <p class="work-card-desc">How I took SureAdhere, an underbuilt TB treatment app, and transformed it into a globally scalable platform, tripling revenue and cutting missed doses in half.</p>
         <div class="work-card-cta">Read the story <span>→</span></div>
       </a>
 
       <a href="meta.html" class="work-card">
-        <div class="work-card-label">Meta · 2017–2023</div>
+        <div class="work-card-header"><span class="work-card-logo"><img src="https://img.logo.dev/meta.com?token=pk_RMBSYA-GTMOxs0F3fcRMxQ&size=80&format=png&fallback=404" width="40" height="40" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><span class="co-mono" style="display:none;background:#0081FB;color:#ffffff;">M</span></span><div class="work-card-label" style="margin-bottom:0;">Meta · 2017–2023</div></div>
         <div class="work-card-title">Protecting two billion people from harm</div>
         <p class="work-card-desc">How I led teams building the world's largest content moderation system, combining AI and human review to protect users on Facebook, Instagram, and WhatsApp.</p>
         <div class="work-card-cta">Read the story <span>→</span></div>
       </a>
 
       <a href="taproot.html" class="work-card">
-        <div class="work-card-label">Taproot Foundation · 2014–2016</div>
+        <div class="work-card-header"><span class="work-card-logo"><img src="https://img.logo.dev/taprootfoundation.org?token=pk_RMBSYA-GTMOxs0F3fcRMxQ&size=80&format=png&fallback=404" width="40" height="40" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><span class="co-mono" style="display:none;background:#1A1714;color:#ffffff;">T+</span></span><div class="work-card-label" style="margin-bottom:0;">Taproot Foundation · 2014–2016</div></div>
         <div class="work-card-title">Building a pro bono marketplace from zero</div>
         <p class="work-card-desc">How I launched Taproot+ from scratch, using lean product principles to reach 30,000 users and unlock $10M in pro bono services for nonprofits.</p>
         <div class="work-card-cta">Read the story <span>→</span></div>
       </a>
 
       <a href="irc.html" class="work-card">
-        <div class="work-card-label">IRC · 2016–2024</div>
+        <div class="work-card-header"><span class="work-card-logo"><img src="https://img.logo.dev/rescue.org?token=pk_RMBSYA-GTMOxs0F3fcRMxQ&size=80&format=png&fallback=404" width="40" height="40" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><span class="co-mono" style="display:none;background:#FFCB00;color:#1A1714;">IRC</span></span><div class="work-card-label" style="margin-bottom:0;">IRC · 2016–2024</div></div>
         <div class="work-card-title">A roadmap for refugee crises</div>
         <p class="work-card-desc">How I designed an interactive emergency response tool that gave IRC field staff instant access to critical guidance, validated and shipped in seven weeks.</p>
         <div class="work-card-cta">Read the story <span>→</span></div>
@@ -650,8 +684,7 @@
 
           <!-- ── DIMAGI (grouped: 2 roles) ── -->
           <li class="experience-group">
-            <div class="exp-company">Dimagi</div>
-            <div class="exp-company-meta">Remote · May 2024 – Present · 1 yr 11 mos</div>
+            <div class="exp-company-header"><span class="co-logo"><img src="https://img.logo.dev/dimagi.com?token=pk_RMBSYA-GTMOxs0F3fcRMxQ&size=88&format=png&fallback=404" width="44" height="44" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><span class="co-mono" style="display:none;background:#1B4F8A;color:#ffffff;">D</span></span><div><div class="exp-company">Dimagi</div><div class="exp-company-meta">Remote · May 2024 – Present · 1 yr 11 mos</div></div></div>
             <ul class="sub-roles">
               <li class="sub-role">
                 <div class="exp-role">Head of Product, SureAdhere</div>
@@ -676,8 +709,7 @@
 
           <!-- ── META (grouped: 2 roles) ── -->
           <li class="experience-group">
-            <div class="exp-company">Meta</div>
-            <div class="exp-company-meta">San Francisco Bay Area · Nov 2017 – Jul 2023 · 5 yrs 9 mos</div>
+            <div class="exp-company-header"><span class="co-logo"><img src="https://img.logo.dev/meta.com?token=pk_RMBSYA-GTMOxs0F3fcRMxQ&size=88&format=png&fallback=404" width="44" height="44" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><span class="co-mono" style="display:none;background:#0081FB;color:#ffffff;">M</span></span><div><div class="exp-company">Meta</div><div class="exp-company-meta">San Francisco Bay Area · Nov 2017 – Jul 2023 · 5 yrs 9 mos</div></div></div>
             <ul class="sub-roles">
               <li class="sub-role">
                 <div class="exp-role">Product Lead</div>
@@ -706,15 +738,17 @@
 
           <!-- ── IRC ── -->
           <li class="experience-item">
-            <div class="exp-role">Product Strategy Advisor</div>
+            <div class="exp-item-header"><span class="co-logo"><img src="https://img.logo.dev/rescue.org?token=pk_RMBSYA-GTMOxs0F3fcRMxQ&size=88&format=png&fallback=404" width="44" height="44" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><span class="co-mono" style="display:none;background:#FFCB00;color:#1A1714;">IRC</span></span><div><div class="exp-role">Product Strategy Advisor</div>
             <div class="exp-meta"><strong>International Rescue Committee</strong> · Remote · Oct 2016 – May 2024 · 7 yrs 8 mos</div>
+            </div></div>
             <p class="exp-desc">Worked with the IRC on digital tools to improve their ability to respond to humanitarian crises. Built Dioptra, used by NGOs worldwide to measure the impact and cost efficiency of humanitarian work, with the goal of reaching a million more people with critical humanitarian aid.</p>
           </li>
 
           <!-- ── TAPROOT ── -->
           <li class="experience-item">
-            <div class="exp-role">Product Lead, Taproot+</div>
+            <div class="exp-item-header"><span class="co-logo"><img src="https://img.logo.dev/taprootfoundation.org?token=pk_RMBSYA-GTMOxs0F3fcRMxQ&size=88&format=png&fallback=404" width="44" height="44" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><span class="co-mono" style="display:none;background:#1A1714;color:#ffffff;">T+</span></span><div><div class="exp-role">Product Lead, Taproot+</div>
             <div class="exp-meta"><strong>Taproot Foundation</strong> · New York, NY · Jun 2014 – Oct 2016 · 2 yrs 5 mos</div>
+            </div></div>
             <p class="exp-desc">Launched and scaled a marketplace for pro bono projects from the ground up. In 2.5 years, grew to 30,000 users and resulted in $10 million in pro bono service delivered.</p>
             <div class="exp-stats">
               <span class="stat"><strong>30,000+</strong> users</span>
@@ -724,29 +758,33 @@
 
           <!-- ── MONGODB ── -->
           <li class="experience-item">
-            <div class="exp-role">Global Education Coordinator</div>
+            <div class="exp-item-header"><span class="co-logo"><img src="https://img.logo.dev/mongodb.com?token=pk_RMBSYA-GTMOxs0F3fcRMxQ&size=88&format=png&fallback=404" width="44" height="44" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><span class="co-mono" style="display:none;background:#001E2B;color:#00ED64;">MDB</span></span><div><div class="exp-role">Global Education Coordinator</div>
             <div class="exp-meta"><strong>MongoDB</strong> · New York, NY · Jul 2013 – Jul 2014 · 1 yr 1 mo</div>
+            </div></div>
             <p class="exp-desc">Managed learning tools, curricula, and training programs for MongoDB software for public and private customers around the world.</p>
           </li>
 
           <!-- ── DREAMBOX ── -->
           <li class="experience-item">
-            <div class="exp-role">Co-Founder &amp; Head of Product</div>
+            <div class="exp-item-header"><span class="co-logo"><img src="https://img.logo.dev/dreamboxlearning.com?token=pk_RMBSYA-GTMOxs0F3fcRMxQ&size=88&format=png&fallback=404" width="44" height="44" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><span class="co-mono" style="display:none;background:#2D2D2D;color:#ffffff;">DB</span></span><div><div class="exp-role">Co-Founder &amp; Head of Product</div>
             <div class="exp-meta"><strong>Dreambox Emergence</strong> · New York, NY · Jun 2012 – Jun 2014 · 2 yrs 1 mo</div>
+            </div></div>
             <p class="exp-desc">Co-founded and led product strategy at a B-corp created to empower remote communities in Guatemala to re-think local manufacturing with custom-built 3D printers.</p>
           </li>
 
           <!-- ── GARDINER ── -->
           <li class="experience-item">
-            <div class="exp-role">Project Manager</div>
+            <div class="exp-item-header"><span class="co-logo"><img src="https://img.logo.dev/gardiner-theobald.com?token=pk_RMBSYA-GTMOxs0F3fcRMxQ&size=88&format=png&fallback=404" width="44" height="44" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><span class="co-mono" style="display:none;background:#8B1A1A;color:#ffffff;">GT</span></span><div><div class="exp-role">Project Manager</div>
             <div class="exp-meta"><strong>Gardiner &amp; Theobald LLP</strong> · New York, NY · Jul 2011 – Jul 2013 · 2 yrs 1 mo</div>
+            </div></div>
             <p class="exp-desc">Coordinated four major NYC construction projects from start to finish, ranging from $10 to $100 million each, managing government, contractor, and owner stakeholders.</p>
           </li>
 
           <!-- ── JP MORGAN ── -->
           <li class="experience-item">
-            <div class="exp-role">Investment Banking Analyst</div>
+            <div class="exp-item-header"><span class="co-logo"><img src="https://img.logo.dev/jpmorgan.com?token=pk_RMBSYA-GTMOxs0F3fcRMxQ&size=88&format=png&fallback=404" width="44" height="44" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><span class="co-mono" style="display:none;background:#003087;color:#ffffff;">JPM</span></span><div><div class="exp-role">Investment Banking Analyst</div>
             <div class="exp-meta"><strong>J.P. Morgan</strong> · New York, NY · Jun 2010 – Aug 2010 · 3 mos</div>
+            </div></div>
             <p class="exp-desc">Summer analyst in investment banking.</p>
           </li>
 
@@ -805,5 +843,5 @@
 
       <div class="sidebar-block" id="education">
         <p class="sidebar-label">Education</p>
-        <div class="edu-school">Columbia University</div>
+        <span style="width:44px;height:44px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;border-radius:8px;border:1px solid var(--rule);background:white;overflow:hidden;margin-bottom:0.75rem;"><img src="https://img.logo.dev/columbia.edu?token=pk_RMBSYA-GTMOxs0F3fcRMxQ&size=88&format=png&fallback=404" width="44" height="44" alt="" style="object-fit:contain;" onerror="this.style.display:'none';this.nextElementSibling.style.display='flex';"><span style="display:none;width:44px;height:44px;align-items:center;justify-content:center;border-radius:8px;background:#003DA5;color:white;font-family:var(--sans);font-size:18px;font-weight:700;">C</span></span><div class="edu-school">Columbia University</div>
         <div class="edu-degree">B.S. Industrial Engineering &amp; Operations Research<br>Minors in Economics &amp; Sustainabl
