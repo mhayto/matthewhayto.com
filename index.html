@@ -106,6 +106,7 @@
       display: flex;
       align-items: center;
       gap: 0.4rem;
+      white-space: nowrap;
     }
 
     .contact-links a:hover { color: var(--accent); }
@@ -544,7 +545,7 @@
       display: flex; align-items: center; gap: 0.85rem; margin-bottom: 0.15rem;
     }
     .exp-item-header {
-      display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;
+      display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.5rem;
     }
     .exp-item-header .exp-role { margin-bottom: 0; }
     .work-card-header {
@@ -558,6 +559,12 @@
     }
     .work-card-logo img { width: 40px; height: 40px; object-fit: contain; }
     .work-card-logo .co-mono { width: 40px; height: 40px; font-size: 10px; border-radius: 8px; }
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
     /* ─── ANIMATIONS ─── */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(16px); }
@@ -566,30 +573,90 @@
 
     /* ─── RESPONSIVE ─── */
     @media (max-width: 700px) {
-      .header-inner {
-        grid-template-columns: 1fr;
-      }
+
+      /* Page padding tighter on mobile */
+      .page { padding: 0 1.25rem; }
+
+      /* Header: stack everything, reduce top padding */
+      header { padding: 2rem 0 2rem; }
+      .header-inner { grid-template-columns: 1fr; gap: 1.25rem; }
+
+      /* Name smaller on mobile */
+      .name { font-size: clamp(2.4rem, 11vw, 3.5rem); }
+
+      /* Contact links: row, wrap, left-aligned, smaller text */
       .contact-links {
         flex-direction: row;
+        flex-wrap: wrap;
         align-items: flex-start;
+        gap: 0.5rem 1.25rem;
+        margin-top: 0.25rem;
       }
-      main {
-        grid-template-columns: 1fr;
+      .contact-links a {
+        font-size: 0.78rem;
       }
+
+      /* Nav: tighter gap, allow wrapping */
+      nav {
+        gap: 1.25rem;
+        flex-wrap: wrap;
+        padding: 1rem 0;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      nav a { font-size: 0.72rem; }
+
+      /* Work cards: single column full width */
+      .work-grid { grid-template-columns: 1fr; gap: 1rem; }
+      #work { padding: 2.5rem 0; }
+
+      /* Main: single column, less padding */
+      main { grid-template-columns: 1fr; padding: 2.5rem 0; }
+
+      /* Aside */
       aside {
         border-left: none;
         border-top: 1px solid var(--rule);
         padding-left: 0;
         padding-top: 2.5rem;
       }
-      .experience-item, .experience-group {
-        padding-right: 0;
-      }
+
+      /* Experience */
+      .experience-item, .experience-group { padding-right: 0; }
+      .exp-company { font-size: 1.05rem; }
+      .exp-company-header { gap: 0.65rem; }
+
+      /* Stats tags wrap nicely */
+      .exp-stats { gap: 0.4rem; }
+      .stat { font-size: 0.7rem; }
+
+      /* Work card padding */
+      .work-card { padding: 1.25rem; }
+      .work-card-title { font-size: 1.05rem; }
+
+      /* Section label */
+      .section-label { margin-bottom: 1.25rem; }
+
+      /* Sidebar blocks */
+      .sidebar-block { margin-bottom: 2rem; }
+
+      /* Footer */
       footer {
         flex-direction: column;
         gap: 1rem;
         align-items: flex-start;
+        padding: 1.5rem 0;
       }
+
+      /* Co-logo sizing on mobile */
+      .co-logo, .co-mono { width: 38px; height: 38px; }
+      .co-logo img { width: 38px; height: 38px; }
+    }
+
+    /* Extra small screens */
+    @media (max-width: 400px) {
+      .name { font-size: 2.2rem; }
+      nav { gap: 1rem; }
     }
   </style>
 </head>
@@ -640,7 +707,7 @@
   <!-- ─── SELECTED WORK ─── -->
   <section id="work" style="padding: 3.5rem 0; border-bottom: 1px solid var(--rule); opacity:0; animation: fadeUp 0.8s ease 0.15s forwards;">
     <p class="section-label">Selected Work</p>
-    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
+    <div class="work-grid">
 
       <a href="dimagi.html" class="work-card">
         <div class="work-card-header"><span class="work-card-logo"><img src="https://img.logo.dev/dimagi.com?token=pk_RMBSYA-GTMOxs0F3fcRMxQ&size=80&format=png&fallback=404" width="40" height="40" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><span class="co-mono" style="display:none;background:#1B4F8A;color:#ffffff;">D</span></span><div class="work-card-label" style="margin-bottom:0;">Dimagi · 2024–Present</div></div>
